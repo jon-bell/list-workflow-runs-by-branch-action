@@ -1,0 +1,24 @@
+{
+  "name": "list-workflow-runs-by-branch-action",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jon-bell/list-workflow-runs-by-branch-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jon-bell/list-workflow-runs-by-branch-action/issues"
+  },
+  "homepage": "https://github.com/jon-bell/list-workflow-runs-by-branch-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0"
+  }
+}

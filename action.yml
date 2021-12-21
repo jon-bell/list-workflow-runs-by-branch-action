@@ -1,0 +1,17 @@
+name: 'List Workflow Runs in Branches'
+description: 'Lists runs of this workflow in other branches specified'
+inputs:
+  include_branches:  
+    description: 'Names of branches to include in the query'
+    required: true
+    default: 'main'
+  number_runs:
+    description: 'Maximum number of workflow runs to return'
+    required: false
+    default: 2
+outputs:
+  workflow_runs: 
+    description: 'JSON string {someBranch: [ workflowRuns ], someOtherBranch: [ ... ] }'
+runs:
+  using: 'node12'
+  main: 'index.js'
