@@ -4,7 +4,8 @@ const github = require('@actions/github');
 async function getLastNWorkflowRuns(octokit, workflow_id, branch, numRuns){
     const res = await octokit.rest.actions.listWorkflowRuns({
         ...github.context.repo,
-        workflow_id: workflow_id, branch: branch
+        workflow_id: workflow_id, branch: branch,
+        status: "success"
     });
     runs_this_branch = res.data.workflow_runs;
     runs_this_branch.sort((a, b) => {
@@ -43,7 +44,7 @@ async function action() {
                 }
             }
         }
-        const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, thisWfID, branch, number_runs + (branch == branch_triggering ? 1 : 0))));
+        const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, thisWfID, branch, number_runs));
 
         console.log("WF: " + workflow)
         console.log("BranchTrigger: " + branch_triggering)
