@@ -11,6 +11,7 @@ jobs:
         uses: jon-bell/list-workflow-runs-by-branch-action@main
         with:
           include_branches: 'main, dev'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Use the output from the `hello` step
       - name: Get the output value
         run: echo "The output was ${{ steps.dev_step.outputs.workflow_runs }}"

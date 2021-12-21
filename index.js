@@ -6,13 +6,16 @@ try {
     console.log(`Hello ${nameToGreet}!`);
     //This branch 
     const branch_triggering = github.context.payload.ref; //"refs/head/main"
+    const workflow = github.context.workflow; //"dev"
+    const runID = github.context.runId;
+
+    const octokit = core.getInput("GITHUB_TOKEN");
 
 
     const time = (new Date()).toTimeString();
     core.setOutput("workflow_runs", time);
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const context = JSON.stringify(github.context, undefined, 2)
-    console.log(`The context: ${context}`);
+    const dbg = JSON.stringify(github.context, undefined, 2)
+    console.log(`The thing: ${dbg}`);
 } catch (error) {
     core.setFailed(error.message);
 }

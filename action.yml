@@ -9,6 +9,9 @@ inputs:
     description: 'Maximum number of workflow runs to return'
     required: false
     default: 2
+  GITHUB_TOKEN:
+    required: true
+    description: 'Pass myToken: ${{ secrets.GITHUB_TOKEN }}'
 outputs:
   workflow_runs: 
     description: 'JSON string {someBranch: [ workflowRuns ], someOtherBranch: [ ... ] }'
