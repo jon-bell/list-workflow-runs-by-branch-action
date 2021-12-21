@@ -8,7 +8,7 @@ async function getLastNWorkflowRuns(octokit, workflow_id, branch, numRuns){
     });
     runs_this_branch = res.data.workflow_runs;
     runs_this_branch.sort((a, b) => {
-        return a.created_at.localeCompare(b.created_at);
+        return b.created_at.localeCompare(a.created_at);
     });
     return runs_this_branch.slice(0, numRuns);
 }
