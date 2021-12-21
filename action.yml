@@ -11,7 +11,7 @@ inputs:
     default: 2
   GITHUB_TOKEN:
     required: true
-    description: 'Pass myToken: ${{ secrets.GITHUB_TOKEN }}'
+    description: 'Pass the GITHUB_TOKEN'
 outputs:
   workflow_runs: 
     description: 'JSON string {someBranch: [ workflowRuns ], someOtherBranch: [ ... ] }'

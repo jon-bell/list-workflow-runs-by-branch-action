@@ -9,12 +9,11 @@ try {
     const workflow = github.context.workflow; //"dev"
     const runID = github.context.runId;
 
-    const octokit = core.getInput("GITHUB_TOKEN");
-
+    const octokit = github.getOctokit(core.getInput("GITHUB_TOKEN"));
 
     const time = (new Date()).toTimeString();
     core.setOutput("workflow_runs", time);
-    const dbg = JSON.stringify(github.context, undefined, 2)
+    const dbg = JSON.stringify(res, undefined, 2)
     console.log(`The thing: ${dbg}`);
 } catch (error) {
     core.setFailed(error.message);
