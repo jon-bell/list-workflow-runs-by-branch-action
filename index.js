@@ -44,7 +44,7 @@ async function action() {
                 }
             }
         }
-        const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, thisWfID, branch, number_runs));
+        const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, thisWfID, branch, number_runs)));
 
         console.log("WF: " + workflow)
         console.log("BranchTrigger: " + branch_triggering)
