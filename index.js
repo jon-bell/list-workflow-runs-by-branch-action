@@ -4,7 +4,7 @@ const github = require('@actions/github');
 async function getLastNWorkflowRuns(octokit, workflow_id, branch, numRuns){
     const res = await octokit.rest.actions.listWorkflowRuns({
         ...github.context.repo,
-        workflow_id: thisWfID, branch: "main"
+        workflow_id: workflow_id, branch: branch
     });
     runs_this_branch = res.data.workflow_runs;
     runs_this_branch.sort((a, b) => {
