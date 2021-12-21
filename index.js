@@ -19,11 +19,12 @@ async function action(){
             owner: github.context.owner,
             workflow_id: workflow, branch: "main"};
 
+        const dbg = JSON.stringify(req, undefined, 2)
+        console.log(`request: ${dbg}`);
         const res = await octokit.rest.actions.listWorkflowRuns(req)
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
-        const dbg = JSON.stringify(res, undefined, 2)
-        console.log(`The thing: ${dbg}`);
+
     } catch (error) {
         core.setFailed(error.message);
     }
