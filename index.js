@@ -14,12 +14,22 @@ async function action(){
         console.log("WF: " +workflow)
         console.log("BranchTrigger: " + branch_triggering)
 
+        /*
+        TODO plan:
+            1. Get the workflow ID, by using the workflow runID
+            https://docs.github.com/en/rest/reference/actions#get-a-workflow-run
+
+            2. List runs of that workflow, specifying branches
+
+                Always get the LAST run of the current branch, and otherwise respect the param
+        */
         const req = {
             ...github.context.repo,
             workflow_id: workflow, branch: "main"};
 
         const dbg = JSON.stringify(req, undefined, 2)
         console.log(`request: ${dbg}`);
+
         const res = await octokit.rest.actions.listWorkflowRuns(req)
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
