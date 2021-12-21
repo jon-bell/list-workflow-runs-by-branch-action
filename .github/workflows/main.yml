@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: custom action
         id: dev_step
-        uses: jon-bell/list-workflow-runs-by-branch-action@v1.1
+        uses: jon-bell/list-workflow-runs-by-branch-action@main
         with:
           include_branches: 'main, dev'
       # Use the output from the `hello` step
