@@ -61,7 +61,7 @@ async function action() {
         const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, repo, thisWfID, branch, number_runs)));
 
 
-        core.setOutput("workflow_runs", JSON.stringify({ thisBranch: branch_triggering, byBranch: byBranch }));
+        core.setOutput("workflow_runs", JSON.stringify({ thisRun: this.WfRun.data, byBranch: byBranch }));
 
         const dbg2 = JSON.stringify(byBranch, undefined, 2)
         console.log(`debug response: ${dbg2}`);
