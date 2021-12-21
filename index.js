@@ -1,49 +1,46 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-async function action(){
+async function getLastNWorkflowRuns(octokit, workflow_id, branch, numRuns){
+    const res = await octokit.rest.actions.listWorkflowRuns({
+        ...github.context.repo,
+        workflow_id: thisWfID, branch: "main"
+    });
+    runs_this_branch = res.data.workflow_runs;
+    runs_this_branch.sort((a, b) => {
+        return a.created_at.localeCompare(b.created_at);
+    });
+    return runs_this_branch.slice(0, numRuns);
+}
+async function action() {
     try {
-        const nameToGreet = core.getInput('include_branches');
-        console.log(`Hello ${nameToGreet}!`);
+        const include_branches = core.getInput('include_branches');
+        const number_runs = core.getInput('number_runs');
+        console.log(`Include: ${include_branches}!`);
         //This branch 
         const branch_triggering = github.context.payload.ref; //"refs/head/main"
         const workflow = github.context.workflow; //"dev"
         const runID = github.context.runId;
-    
+
         const octokit = github.getOctokit(core.getInput("GITHUB_TOKEN"));
-        console.log("WF: " +workflow)
+        console.log("WF: " + workflow)
         console.log("BranchTrigger: " + branch_triggering)
 
-        /*
-        TODO plan:
-            1. Get the workflow ID, by using the workflow runID
-            https://docs.github.com/en/rest/reference/actions#get-a-workflow-run
-
-            2. List runs of that workflow, specifying branches
-
-                Always get the LAST run of the current branch, and otherwise respect the param
-        */
-       const thisWfRun = await octokit.rest.actions.getWorkflowRun({
-           ...github.context.repo,
-           run_id:runID
-       })
-
-       const thisWfID = thisWfRun.data.workflow_id;
-
-        const req = {
+        const thisWfRun = await octokit.rest.actions.getWorkflowRun({
             ...github.context.repo,
-            workflow_id: thisWfID, branch: "main"};
+            run_id: runID
+        })
 
-        const dbg = JSON.stringify(req, undefined, 2)
-        console.log(`request: ${dbg}`);
+        const thisWfID = thisWfRun.data.workflow_id;
 
-        const res = await octokit.rest.actions.listWorkflowRuns(req)
+       
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
 
+        const res = await getLastNWorkflowRuns(octokit, thisWfID, "main", number_runs);
         const dbg2 = JSON.stringify(res, undefined, 2)
         console.log(`response: ${dbg2}`);
- 
+
     } catch (error) {
         core.setFailed(error.message);
     }
