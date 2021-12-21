@@ -23,6 +23,13 @@ async function action(){
 
                 Always get the LAST run of the current branch, and otherwise respect the param
         */
+       const thisWfRun = await octokit.rest.actions.getWorkflowRun({
+           ...github.context.repo,
+           run_id:runID
+       })
+
+       console.log("WF Run: " + JSON.stringify(thisWfRun, undefined, 2))
+
         const req = {
             ...github.context.repo,
             workflow_id: workflow, branch: "main"};
