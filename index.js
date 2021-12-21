@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-async function getLastNWorkflowRuns(octokit, repo, workflow_id, branch, numRuns){
+async function getLastNWorkflowRuns(octokit, repo, workflow_id, branch, numRuns) {
     const res = await octokit.rest.actions.listWorkflowRuns({
         ...repo,
         workflow_id: workflow_id, branch: branch,
@@ -28,29 +28,31 @@ async function action() {
         const repo = {
             ...github.context.repo,
         }
-        if(core.getInput("repo")){
-            const manualRepo = core.getInput("repo") .split("/");
-            repo.owner = manualRepo[0];
-            repo.repo = manualRepo[1];
-        }
 
         const thisWfRun = await octokit.rest.actions.getWorkflowRun({
             ...repo,
             run_id: runID
         })
 
-        const branch_triggering = thisWfRun.data.head_branch; 
+        console.log("THIS wfrun: " + JSON.stringify(thisWfRun, null, 2));
+        if (core.getInput("repo")) {
+            const manualRepo = core.getInput("repo").split("/");
+            repo.owner = manualRepo[0];
+            repo.repo = manualRepo[1];
+        }
+
+        const branch_triggering = thisWfRun.data.head_branch;
         let thisWfID = thisWfRun.data.workflow_id;
-        if(core.getInput("workflow_id")){
+        if (core.getInput("workflow_id")) {
             thisWfID = core.getInput("workflow_id");
         }
 
         const branchesToCheck = [branch_triggering];
         const results = {};
-        if(include_branches){
-            for(let s of include_branches.split(",")){
+        if (include_branches) {
+            for (let s of include_branches.split(",")) {
                 s = s.trim();
-                if(!branchesToCheck.includes(s)){
+                if (!branchesToCheck.includes(s)) {
                     branchesToCheck.push(s);
                 }
             }
@@ -59,7 +61,7 @@ async function action() {
 
         console.log("WF: " + workflow)
         console.log("BranchTrigger: " + branch_triggering)
-       
+
         core.setOutput("workflow_runs", JSON.stringify(byBranch));
 
         const dbg2 = JSON.stringify(byBranch, undefined, 2)
