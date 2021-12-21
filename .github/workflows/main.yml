@@ -4,7 +4,7 @@ on: [push]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: dev debug
+    name: dev main
     steps:
       - name: custom action
         id: dev_step
