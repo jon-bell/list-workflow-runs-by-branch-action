@@ -18,21 +18,21 @@ async function action() {
         const number_runs = core.getInput('number_runs');
         console.log(`Include: ${include_branches}!`);
         //This branch 
-        const branch_triggering = github.context.payload.ref; //"refs/head/main"
         const workflow = github.context.workflow; //"dev"
         const runID = github.context.runId;
 
         const octokit = github.getOctokit(core.getInput("GITHUB_TOKEN"));
-        console.log("WF: " + workflow)
-        console.log("BranchTrigger: " + branch_triggering)
 
         const thisWfRun = await octokit.rest.actions.getWorkflowRun({
             ...github.context.repo,
             run_id: runID
         })
 
+        const branch_triggering = thisWfRun.data.head_branch; 
         const thisWfID = thisWfRun.data.workflow_id;
 
+        console.log("WF: " + workflow)
+        console.log("BranchTrigger: " + branch_triggering)
        
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
