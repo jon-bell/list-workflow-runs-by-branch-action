@@ -4,14 +4,16 @@ on: [push]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: dev main
+    name: dev debug
     steps:
       - name: custom action
         id: dev_step
         uses: jon-bell/list-workflow-runs-by-branch-action@main
         with:
-          include_branches: 'main, dev'
+          # include_branches: 'main, dev'
+          include_branches: 'fast-collision-free-coverage,reporting-ci'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          workflow_id: 'eval-10m-5x.yml'
       # Use the output from the `hello` step
       - name: Get the output value
         run: echo "The output was ${{ steps.dev_step.outputs.workflow_runs }}"
