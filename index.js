@@ -7,14 +7,16 @@ async function getLastNWorkflowRuns(octokit, repo, workflow_id, branch, numRuns)
         workflow_id: workflow_id, branch: branch,
         status: "success"
     };
-    console.log(JSON.stringify(req,null,2))
+    console.log(JSON.stringify(req, null, 2))
     const res = await octokit.rest.actions.listWorkflowRuns(req);
     runs_this_branch = res.data.workflow_runs;
     runs_this_branch.sort((a, b) => {
         return b.created_at.localeCompare(a.created_at);
     });
-    const ret = {};
-    ret[branch] = runs_this_branch.slice(0, numRuns);
+    const ret = {
+        name: branch, 
+        workflow_runs: runs_this_branch.slice(0, numRuns)
+    };
     return ret;
 }
 async function action() {
@@ -59,7 +61,7 @@ async function action() {
         const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, repo, thisWfID, branch, number_runs)));
 
 
-        core.setOutput("workflow_runs", JSON.stringify({thisBranch: branch_triggering, byBranch: byBranch}));
+        core.setOutput("workflow_runs", JSON.stringify({ thisBranch: branch_triggering, byBranch: byBranch }));
 
         const dbg2 = JSON.stringify(byBranch, undefined, 2)
         console.log(`debug response: ${dbg2}`);
