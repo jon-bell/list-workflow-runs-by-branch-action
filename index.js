@@ -14,7 +14,7 @@ async function action(){
         console.log("WF: " +workflow)
         console.log("BranchTrigger: " + branch_triggering)
         const res = await octokit.rest.actions.listWorkflowRuns({
-            ...context.repo,
+            ...github.context.repo,
             workflow_id: workflow, branch: "main"})
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
