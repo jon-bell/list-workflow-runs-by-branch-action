@@ -28,11 +28,11 @@ async function action(){
            run_id:runID
        })
 
-       console.log("WF Run: " + JSON.stringify(thisWfRun, undefined, 2))
+       const thisWfID = thisWfRun.data.workflow_id;
 
         const req = {
             ...github.context.repo,
-            workflow_id: workflow, branch: "main"};
+            workflow_id: thisWfID, branch: "main"};
 
         const dbg = JSON.stringify(req, undefined, 2)
         console.log(`request: ${dbg}`);
