@@ -13,10 +13,13 @@ async function action(){
         const octokit = github.getOctokit(core.getInput("GITHUB_TOKEN"));
         console.log("WF: " +workflow)
         console.log("BranchTrigger: " + branch_triggering)
-        const res = await octokit.rest.actions.listWorkflowRuns({
+
+        const req = {
             repo: github.context.repo,
             owner: github.context.owner,
-            workflow_id: workflow, branch: "main"})
+            workflow_id: workflow, branch: "main"};
+
+        const res = await octokit.rest.actions.listWorkflowRuns(req)
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
         const dbg = JSON.stringify(res, undefined, 2)
