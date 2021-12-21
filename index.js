@@ -15,8 +15,7 @@ async function action(){
         console.log("BranchTrigger: " + branch_triggering)
 
         const req = {
-            repo: github.context.repo,
-            owner: github.context.owner,
+            ...github.context.repo,
             workflow_id: workflow, branch: "main"};
 
         const dbg = JSON.stringify(req, undefined, 2)
@@ -25,6 +24,9 @@ async function action(){
         const time = (new Date()).toTimeString();
         core.setOutput("workflow_runs", time);
 
+        const dbg2 = JSON.stringify(res, undefined, 2)
+        console.log(`response: ${dbg2}`);
+ 
     } catch (error) {
         core.setFailed(error.message);
     }
