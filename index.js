@@ -49,8 +49,7 @@ async function action() {
         console.log("WF: " + workflow)
         console.log("BranchTrigger: " + branch_triggering)
        
-        const time = (new Date()).toTimeString();
-        core.setOutput("workflow_runs", time);
+        core.setOutput("workflow_runs", JSON.stringify(byBranch));
 
         const dbg2 = JSON.stringify(byBranch, undefined, 2)
         console.log(`response: ${dbg2}`);
