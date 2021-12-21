@@ -9,6 +9,12 @@ inputs:
     description: 'Maximum number of workflow runs to return'
     required: false
     default: 1
+  repo:
+    descripton: 'Repo to query (e.g. jon-bell/jqf), defaults to the current'
+    required: false
+  workflow_id:
+    description: 'Workflow ID to query, defaults to the workflow triggering this action'
+    required: false
   GITHUB_TOKEN:
     required: true
     description: 'Pass the GITHUB_TOKEN'

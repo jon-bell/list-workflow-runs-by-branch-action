@@ -1,9 +1,9 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-async function getLastNWorkflowRuns(octokit, workflow_id, branch, numRuns){
+async function getLastNWorkflowRuns(octokit, repo, workflow_id, branch, numRuns){
     const res = await octokit.rest.actions.listWorkflowRuns({
-        ...github.context.repo,
+        ...repo,
         workflow_id: workflow_id, branch: branch,
         status: "success"
     });
@@ -25,14 +25,25 @@ async function action() {
         const runID = github.context.runId;
 
         const octokit = github.getOctokit(core.getInput("GITHUB_TOKEN"));
+        const repo = {
+            ...github.context.repo,
+        }
+        if(core.getInput("repo")){
+            const manualRepo = core.getInput("repo") .split("/");
+            repo.owner = manualRepo[0];
+            repo.repo = manualRepo[1];
+        }
 
         const thisWfRun = await octokit.rest.actions.getWorkflowRun({
-            ...github.context.repo,
+            ...repo,
             run_id: runID
         })
 
         const branch_triggering = thisWfRun.data.head_branch; 
-        const thisWfID = thisWfRun.data.workflow_id;
+        let thisWfID = thisWfRun.data.workflow_id;
+        if(core.getInput("workflow_id")){
+            thisWfID = core.getInput("workflow_id");
+        }
 
         const branchesToCheck = [branch_triggering];
         const results = {};
@@ -44,7 +55,7 @@ async function action() {
                 }
             }
         }
-        const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, thisWfID, branch, number_runs)));
+        const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, repo, thisWfID, branch, number_runs)));
 
         console.log("WF: " + workflow)
         console.log("BranchTrigger: " + branch_triggering)
