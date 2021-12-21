@@ -22,8 +22,6 @@ async function action() {
         const include_branches = core.getInput('include_branches');
         const number_runs = core.getInput('number_runs');
         console.log(`Include: ${include_branches}!`);
-        //This branch 
-        const workflow = github.context.workflow; //"dev"
         const runID = github.context.runId;
 
         const octokit = github.getOctokit(core.getInput("GITHUB_TOKEN"));
@@ -36,7 +34,6 @@ async function action() {
             run_id: runID
         })
 
-        console.log("THIS wfrun: " + JSON.stringify(thisWfRun, null, 2));
         if (core.getInput("repo")) {
             const manualRepo = core.getInput("repo").split("/");
             repo.owner = manualRepo[0];
@@ -61,13 +58,11 @@ async function action() {
         }
         const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, repo, thisWfID, branch, number_runs)));
 
-        console.log("WF: " + workflow)
-        console.log("BranchTrigger: " + branch_triggering)
 
-        core.setOutput("workflow_runs", JSON.stringify(byBranch));
+        core.setOutput("workflow_runs", JSON.stringify({thisBranch: branch_triggering, byBranch: byBranch}));
 
         const dbg2 = JSON.stringify(byBranch, undefined, 2)
-        console.log(`response: ${dbg2}`);
+        console.log(`debug response: ${dbg2}`);
 
     } catch (error) {
         core.setFailed(error.message);
