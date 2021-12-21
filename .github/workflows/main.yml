@@ -14,6 +14,7 @@ jobs:
           include_branches: 'fast-collision-free-coverage,reporting-ci'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           workflow_id: 'eval-10m-5x.yml'
+          repo: jon-bell/JQF
       # Use the output from the `hello` step
       - name: Get the output value
         run: echo "The output was ${{ steps.dev_step.outputs.workflow_runs }}"
