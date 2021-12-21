@@ -2,11 +2,13 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 async function getLastNWorkflowRuns(octokit, repo, workflow_id, branch, numRuns) {
-    const res = await octokit.rest.actions.listWorkflowRuns({
+    const req = {
         ...repo,
         workflow_id: workflow_id, branch: branch,
         status: "success"
-    });
+    };
+    console.log(JSON.stringify(req,null,2))
+    const res = await octokit.rest.actions.listWorkflowRuns(req);
     runs_this_branch = res.data.workflow_runs;
     runs_this_branch.sort((a, b) => {
         return b.created_at.localeCompare(a.created_at);
