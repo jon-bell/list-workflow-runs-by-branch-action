@@ -13,5 +13,5 @@ jobs:
           # include_branches: 'main, dev'
           include_branches: 'fast-collision-free-coverage,reporting-ci'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          workflow_id: 'eval-10m-5x.yml'
+          workflow_id: 'eval-24h-5x.yml'
           repo: jon-bell/JQF
