@@ -63,9 +63,6 @@ async function action() {
 
         core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
 
-        const dbg2 = JSON.stringify(byBranch, undefined, 2)
-        console.log(`debug response: ${dbg2}`);
-
     } catch (error) {
         core.setFailed(error.message);
     }

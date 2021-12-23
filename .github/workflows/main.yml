@@ -15,3 +15,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           workflow_id: 'eval-24h-5x.yml'
           repo: jon-bell/JQF
+      - name: print result
+        run: echo ${{ steps.dev_step.outputs.workflow_runs }} 
