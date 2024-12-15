@@ -44,8 +44,11 @@ async function action() {
 
         const branch_triggering = thisWfRun.data.head_branch;
         let thisWfID = thisWfRun.data.workflow_id;
-        if (core.getInput("workflow_id")) {
-            thisWfID = core.getInput("workflow_id");
+        let patchThisWFRun = false;
+        const coreWFID = core.getInput("workflow_id");
+        if (coreWFID && thisWfID !== coreWFID) {
+            thisWfID = coreWFID;
+            patchThisWFRun = true;
         }
 
         const branchesToCheck = [branch_triggering];
@@ -60,8 +63,14 @@ async function action() {
         }
         const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, repo, thisWfID, branch, number_runs)));
 
-
-        core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
+        if(patchThisWFRun){
+            //Remove the run on this branch from byBranch, make it be "thisRun"
+            const thisRun = byBranch.find(x => x.name === branch_triggering);
+            byBranch.splice(byBranch.indexOf(thisRun), 1);
+            core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisRun, byBranch: byBranch }));
+        } else {
+            core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
+        }
 
     } catch (error) {
         core.setFailed(error.message);
