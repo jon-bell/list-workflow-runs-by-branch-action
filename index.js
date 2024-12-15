@@ -67,9 +67,19 @@ async function action() {
             //Remove the run on this branch from byBranch, make it be "thisRun"
             const thisRun = byBranch.find(x => x.name === branch_triggering);
             byBranch.splice(byBranch.indexOf(thisRun), 1);
-            thisWfRun.data.workflow_runs = thisRun.workflow_runs;
+            thisWfRun.data.
+            core.setOutput("workflow_runs", JSON.stringify({ thisRun: {
+                repository: thisWfRun.data.repository,
+                name: thisWfRun.data.name,
+                head_sha: thisRun.workflow_runs[0].head_sha,
+                id: thisWfRun.workflow_runs[0].id,
+                run_attempt: thisWfRun.workflow_runs[0].run_attempt,
+            }
+                , byBranch: byBranch
+            }));
+        } else {
+            core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
         }
-        core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
 
     } catch (error) {
         core.setFailed(error.message);
