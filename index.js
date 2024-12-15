@@ -67,6 +67,7 @@ async function action() {
             //Remove the run on this branch from byBranch, make it be "thisRun"
             const thisRun = byBranch.find(x => x.name === branch_triggering);
             byBranch.splice(byBranch.indexOf(thisRun), 1);
+            console.log(JSON.stringify(thisRun, null, 2));
             core.setOutput("workflow_runs", JSON.stringify({ thisRun: {
                 repository: thisWfRun.data.repository,
                 name: thisWfRun.data.name,
