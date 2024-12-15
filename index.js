@@ -72,6 +72,7 @@ async function action() {
                 repository: thisWfRun.data.repository,
                 name: thisRun.workflow_runs[0].name,
                 head_sha: thisRun.workflow_runs[0].head_sha,
+                head_branch: thisRun.workflow_runs[0].head_branch,
                 id: thisRun.workflow_runs[0].id,
                 run_attempt: thisRun.workflow_runs[0].run_attempt,
             }
