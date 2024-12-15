@@ -65,9 +65,9 @@ async function action() {
 
         if (patchThisWFRun) {
             //Remove the run on this branch from byBranch, make it be "thisRun"
-            const runs = byBranch.find(x => x.name === branch_triggering).workflow_runs;
+            const thisRun = byBranch.find(x => x.name === branch_triggering);
             byBranch.splice(byBranch.indexOf(thisRun), 1);
-            thisWfRun.data.workflow_runs = runs;
+            thisWfRun.data.workflow_runs = runs.workflow_runs;
         }
         core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
 
