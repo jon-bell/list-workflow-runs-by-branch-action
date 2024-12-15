@@ -14,7 +14,7 @@ async function getLastNWorkflowRuns(octokit, repo, workflow_id, branch, numRuns)
         return b.created_at.localeCompare(a.created_at);
     });
     const ret = {
-        name: branch, 
+        name: branch,
         workflow_runs: runs_this_branch.slice(0, numRuns)
     };
     return ret;
@@ -63,14 +63,13 @@ async function action() {
         }
         const byBranch = await Promise.all(branchesToCheck.map(branch => getLastNWorkflowRuns(octokit, repo, thisWfID, branch, number_runs)));
 
-        if(patchThisWFRun){
+        if (patchThisWFRun) {
             //Remove the run on this branch from byBranch, make it be "thisRun"
-            const thisRun = byBranch.find(x => x.name === branch_triggering);
+            const runs = byBranch.find(x => x.name === branch_triggering).workflow_runs;
             byBranch.splice(byBranch.indexOf(thisRun), 1);
-            core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisRun, byBranch: byBranch }));
-        } else {
-            core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
+            thisWfRun.data.workflow_runs = runs;
         }
+        core.setOutput("workflow_runs", JSON.stringify({ thisRun: thisWfRun.data, byBranch: byBranch }));
 
     } catch (error) {
         core.setFailed(error.message);
