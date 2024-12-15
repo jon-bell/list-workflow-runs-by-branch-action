@@ -70,7 +70,7 @@ async function action() {
             console.log(JSON.stringify(thisRun, null, 2));
             core.setOutput("workflow_runs", JSON.stringify({ thisRun: {
                 repository: thisWfRun.data.repository,
-                name: thisWfRun.data.name,
+                name: thisWfRun.workflow_runs[0].name,
                 head_sha: thisRun.workflow_runs[0].head_sha,
                 id: thisRun.workflow_runs[0].id,
                 run_attempt: thisRun.workflow_runs[0].run_attempt,
